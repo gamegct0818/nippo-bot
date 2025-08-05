@@ -16,7 +16,7 @@ app.post("/webhook", async (req, res) => {
   for (const event of events) {
     if (event.type === "message" && event.message.type === "text") {
       const userText = event.message.text;
-      console.log("User message:", userText);
+      console.log("User message:", userText); // ★ログ出力
 
       try {
         const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -35,10 +35,10 @@ app.post("/webhook", async (req, res) => {
         });
 
         const gptData = await gptResponse.json();
-        console.log("GPT Response:", gptData);
+        console.log("GPT Response:", gptData); // ★ログ出力
 
         const report = gptData.choices?.[0]?.message?.content || "エラー: GPT応答がありません";
-        console.log("Generated Report:", report);
+        console.log("Generated Report:", report); // ★ログ出力
 
         await fetch("https://api.line.me/v2/bot/message/reply", {
           method: "POST",
@@ -51,9 +51,10 @@ app.post("/webhook", async (req, res) => {
             messages: [{ type: "text", text: report }]
           })
         });
+
         console.log("LINE返信完了");
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error:", error); // ★エラー出力
       }
     }
   }
