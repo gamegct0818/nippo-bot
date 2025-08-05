@@ -1,4 +1,3 @@
-
 import express from "express";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
@@ -16,7 +15,7 @@ app.post("/webhook", async (req, res) => {
   for (const event of events) {
     if (event.type === "message" && event.message.type === "text") {
       const userText = event.message.text;
-      console.log("User message:", userText); // ★ログ出力
+      console.log("User message:", userText);
 
       try {
         const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -35,10 +34,10 @@ app.post("/webhook", async (req, res) => {
         });
 
         const gptData = await gptResponse.json();
-        console.log("GPT Response:", gptData); // ★ログ出力
+        console.log("GPT Response:", gptData);
 
         const report = gptData.choices?.[0]?.message?.content || "エラー: GPT応答がありません";
-        console.log("Generated Report:", report); // ★ログ出力
+        console.log("Generated Report:", report);
 
         await fetch("https://api.line.me/v2/bot/message/reply", {
           method: "POST",
@@ -54,7 +53,7 @@ app.post("/webhook", async (req, res) => {
 
         console.log("LINE返信完了");
       } catch (error) {
-        console.error("Error:", error); // ★エラー出力
+        console.error("Error:", error);
       }
     }
   }
